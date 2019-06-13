@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<title>生成报告页</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="icon" type="image/x-icon" href="/cctv/favicon.ico" />
+<link rel="stylesheet" href="/cctv/css/project/pageguide.min.css" />
+<link rel="stylesheet" href="/cctv/css/comm/modernforms.css">
+<link rel="stylesheet" href="/cctv/css/comm/font-awesome.min.css">
+<link rel="stylesheet" href="/cctv/css/comm/tableStyle.css">
+<script type="text/javascript" src="/cctv/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/cctv/js/layer/layer.js"></script>
+<script type="text/javascript" src="/cctv/js/project/jquery.min.js"></script>
+<script type="text/javascript" src="/cctv/js/project/pageguide.min.js"></script>
+</head>
+<body style="bbackground: #F2F5F7;">
+	<div id="examplePlusWelcome">
+
+		<div id="exampleContent">
+
+			<div class="wrapper modern-forms" style="padding: 0px 0px 200px 0px;">
+				<h1 th:text="${'['+project.name+']-生成Word报告'}"></h1>
+				<div class="data-block first_element_to_target" style="background: #F2F5F7; min-height: 0px;">
+					<h3 style="padding: 27px 0px 10px 220px">第一步：核对项目主要相关信息</h3>
+					<div class="shell">
+						<!--表头 begin-->
+						<div class="head">
+							<div class="headTable">
+								<div class="row">
+									<div class="block">
+										<span>项目编号</span> <input type="text" th:value="${project.no}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>项目标题</span> <input type="text" th:value="${project.name}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>委托单位</span> <input type="text" th:value="${project.client}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>任务地点</span> <input type="text" th:value="${project.site}" disabled="disabled" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="block">
+										<span>管理单位</span> <input type="text" th:value="${itemInfoA?.unit1}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>施工单位</span> <input type="text" th:value="${itemInfoA?.unit2}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>设计单位</span> <input type="text" th:value="${itemInfoA?.unit3}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>监理单位</span> <input type="text" th:value="${itemInfoA?.unit4}" disabled="disabled" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="block">
+										<span>土质材料</span> <input type="text" th:value="${itemInfoA?.material}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>监测依据</span> <input type="text" th:value="${itemInfoA?.standard}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>监测开始</span> <input type="text" th:value="${itemInfoA?.date1}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>监测结束</span> <input type="text" th:value="${itemInfoA?.date2}" disabled="disabled" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--表头 end-->
+
+
+						<!--预算表 begin-->
+						<div class="budget">
+							<div class="budgetShell">
+								<div class="tiaoShell">
+									<div class="tiaoTop">
+										<span class="iconMov"><i class="fa fa-arrows"></i></span><span>项目人员投入</span>
+									</div>
+									<div class="content" th:each="pr,status:${inword}">
+										<span class="icon"> <i class="fa fa-arrows"></i>
+										</span> <span class="short"> <input th:value="${status.count}" name="NO" disabled="disabled" /></span> <span class="middle" th:text="${pr.name}"></span> <span class="middle" th:text="${pr.post}"></span> <span class="middle" th:text="${pr.title}"> </span> <span class="middle" th:text="${pr.papers}"> </span> <span class="middle" th:text="${pr.number}"> </span>
+									</div>
+
+									<div class="content">
+										<span class="icon"></span> <span class="short"></span> <span class="middle"></span> <span class="long"></span> <span class="short"></span> <span class="short"></span> <span class="short">总计:</span> <span class="short" th:text="${inword.size()}"></span> <span class="short" style="width: 56px">人</span>
+									</div>
+								</div>
+
+								<div class="tiaoShell">
+									<div class="tiaoTop">
+										<span class="iconMov"><i class="fa fa-arrows"></i></span><span>设备投入</span>
+									</div>
+									<div class="content" th:each="dr,status:${inDevices}">
+										<span class="icon"> <i class="fa fa-arrows"></i>
+										</span> <span class="short"> <input th:value="${status.count}" name="NO" disabled="disabled" /></span> <span class="middle" th:text="${dr.name}"></span> <span class="middle" th:text="${dr.model}"></span> <span class="middle" th:text="${dr.factory}"> </span> <span class="middle" th:text="${dr.number1}"></span> <span class="middle" th:text="${dr.number2}"> </span>
+									</div>
+
+									<div class="content">
+										<span class="icon"></span> <span class="short"></span> <span class="middle"></span> <span class="long"></span> <span class="short"></span> <span class="short"></span> <span class="short">总计:</span> <span class="short" th:text="${inDevices.size()}"></span> <span class="short" style="width: 56px">台</span>
+									</div>
+								</div>
+
+
+							</div>
+
+						</div>
+						<!--预算表 end-->
+
+						<div class="footerShell">
+							<div class="zongji">
+								<div class="zongji1">
+									<span class="zong_long">现场操作员: </span> <span class="short"><span style="margin: 7px; font-size: 14px;" th:text="${project.person}"></span></span> <span class="short"><input type="text" value="质量监督站" disabled="disabled" /></span> <span class="long_last"><span style="font-size: 14px;" th:text="${itemInfoA?.unit5}"></span> </span>
+								</div>
+								<div class="zongji1">
+									<span class="zong_long">报告编写人:</span> <span class="short"><span style="margin: 7px; font-size: 14px;" th:text="${project.writer}"></span></span> <span class="short"><input type="text" value="监测范围" disabled="disabled" /></span> <span class="long_last"><span style="font-size: 14px;" th:text="${itemInfoA?.extents}"></span> </span>
+								</div>
+								<div class="zongji1">
+									<span class="zong_long">报告校核人:</span> <span class="short"><span style="margin: 7px; font-size: 14px;" th:text="${project.checker}"></span></span> <span class="short"><input type="text" value="交通条件" disabled="disabled" /></span> <span class="long_last"><span style="font-size: 14px;" th:text="${itemInfoA?.conditio}"></span> </span>
+								</div>
+								<div class="zongji1">
+									<span class="zong_long">报告批准人:</span> <span class="short"><span style="margin: 7px; font-size: 14px;" th:text="${project.approver}"></span></span> <span class="short"><input type="text" value="监测目的" disabled="disabled" /></span> <span class="long_last"><span style="font-size: 14px;" th:text="${itemInfoA?.Purpose}"></span> </span>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+				<div class="data-block modern-forms" style="background: #F2F5F7;" id="second_element_to_target">
+					<h3 style="padding: 27px 0px 10px 220px">第二步：核对管道数据</h3>
+					<div class="shell" th:each="pl,status:${pipeList}">
+						<!--表头 begin-->
+						<div class="head">
+							<div class="headTop">
+								<h4 th:text="${'检测管段序号-'+pl.no}"></h4>
+							</div>
+							<div class="headTable">
+								<div class="row">
+									<div class="block">
+										<span>录像文件</span> <input type="text" th:value="${pl.video}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>管段编号</span> <input type="text" th:value="${pl.smanhole+'-'+pl.fmanhole}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>检测方法</span> <input type="text" th:value="${pl.method}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>敷设年代</span> <input type="text" th:value="${pl.laidyear}" disabled="disabled" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="block">
+										<span>起点埋深</span> <input type="text" th:value="${pl.sdepth}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>终点埋深</span> <input type="text" th:value="${pl.fdepth}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>管段类型</span> <input type="text" th:value="${pl.pipetype}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>管段材质</span> <input type="text" th:value="${pl.material}" disabled="disabled" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="block">
+										<span>管道直径</span> <input type="text" th:value="${pl.diameter}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>检测方向</span> <input type="text" th:value="${pl.direction}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>管段长度</span> <input type="text" th:value="${pl.pipelength}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>检测长度</span> <input type="text" th:value="${pl.testlength}" disabled="disabled" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="block" style="width: 75%;">
+										<span>检测地点</span> <input style="width: 679px;" type="text" th:value="${pl.site}" disabled="disabled" />
+									</div>
+
+									<div class="block">
+										<span>检测日期</span> <input type="text" th:value="${pl.date}" disabled="disabled" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--表头 end-->
+
+
+						<!--预算表 begin-->
+						<div class="budget">
+							<div class="budgetShell">
+								<div class="tiaoShell">
+									<div class="tiaoTop">
+										<span class="iconMov"><i class="fa fa-arrows"></i></span><span>管道记录数据</span>
+									</div>
+									<div class="content">
+										<span class="icon"> <i class="fa fa-arrows"></i>
+										</span> <span class="short">序号</span> <span class="middle">距离(m)</span> <span class="middle">缺陷代码</span> <span class="short">等级</span> <span class="short">位置</span> <span class="short">照片序号</span> <span class="middle" style="width: 470px;">备注</span>
+									</div>
+									<div class="content" th:each="dr,status:${pl.items}">
+										<span class="icon"> <i class="fa fa-arrows"></i>
+										</span> <span class="short"> <input th:value="${status.count}" name="NO" disabled="disabled" /></span> <span class="middle" th:text="${dr.dist}"></span> <span class="middle" th:text="${dr.code}"></span> <span class="short" th:text="${dr.grade}"> </span> <span class="short" th:text="${dr.location}"></span> <span class="short" >[[${dr.picture}]]<a th:if="${dr.picture !='' && dr.picture != null && dr.picture != 0 && dr.path != null && dr.path !=''}"  th:onclick="showImg('/cctvImage/[[${dr.path}]].png')" style="cursor: pointer;">查看</a></span> <span class="middle" th:text="${dr.remarks}" style="width: 470px;"> </span>
+									</div>
+
+									<div class="content">
+										<span class="icon"></span> <span class="short"></span> <span class="middle"></span> <span class="long"></span> <span class="short"></span> <span class="short"></span> <span class="short"></span> <span class="short"></span> <span class="short" style="width: 56px"></span>
+									</div>
+								</div>
+
+
+							</div>
+
+						</div>
+						<!--预算表 end-->
+					</div>
+					<div class="footer">
+						<div class="footer_title">测量结果分析</div>
+						<div class="tishi">
+							<input type="text" th:value="${'（1）本区排水管道长'+totalLength+'米，本测区共检测排水管道长'+testLength+'米，其中，雨水管道长'+rainLength+'米，污水管道长'+sewageLength+'米,雨污合流管道长'+confluenceLenth+'米。'}" disabled="disabled">
+						</div>
+
+						<div class="tishi">
+							<input type="text" th:value="${'（2）该次检测共检测出管道缺陷'+defectNumber+'个，其中功能性缺陷'+functionNumber+'个，结构性缺陷'+structureNumber+'个,其他缺陷'+otherNumber+'个。'}" disabled="disabled">
+						</div>
+					</div>
+				</div>
+				<div class="mdn-footer" style="float: right;">
+					<button style="background-color: #ed0273;" type="button" class="mdn-button btn-primary btn-raised res_ok" th:attr="data-value=${project.id}">确认生成报告</button>
+				</div>
+				<div class="mdn-footer" style="position: fixed; top: 0px; right: 0px; z-index: 9999; display: block; float: right; width: 184px; height: 50px; padding: 22px 6px 6px; clear: both; font-size: 11px; line-height: 25px; color: #000; text-align: left; text-decoration: none; cursor: pointer; -webkit-border-radius: 3px 0 0 3px; -moz-border-radius: 3px 0 0 3px; -o-border-radius: 3px 0 0 3px; border-radius: 3px 0 0 3px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; -webkit-transition: all .2s ease-in; -moz-transition: all .2s ease-in; -ms-transition: all .2s ease-in; -o-transition: all .2s ease-in; transition: all .2s ease-in;">
+					<button style="background-color: #ed0273;" type="button" class="mdn-button btn-primary btn-raised res_ok" th:attr="data-value=${project.id}">确认生成报告</button>
+				</div>
+			</div>
+
+			<ul id="tlyPageGuide" data-tourtitle="生成报告模板（.doc文件）步骤">
+				<li class="tlypageguide_left" data-tourtarget=".first_element_to_target">第一步，核对项目主要相关信息。</li>
+				<li class="tlypageguide_right" data-tourtarget="#second_element_to_target">第二步，核对管道数据。</li>
+			</ul>
+		</div>
+
+		<div id="tlyPageGuideWelcome">
+			<p>请您在以下模板中选择要生成Word的报告</p>
+			<button class="tlypageguide_start">CCTV技术报告</button>
+			<button class="tlypageguide_ignore">现状分析评估报告</button>
+			<button class="tlypageguide_dismiss">检测评估报告</button>
+		</div>
+
+	</div>
+	<script type="text/javascript">
+		$(document)
+				.ready(
+						function() {
+							var pageguide = tl.pg.init();
+							$("body")
+									.addClass(
+											"tlyPageGuideWelcomeOpen tlypageguide-open");
+							$("body").prepend(
+									'<div id="tlyPageGuideOverlay"></div>');
+							$(document.body).css({
+								"overflow-y" : "hidden"
+							});
+
+							$(".tlypageguide_start")
+									.on(
+											'click',
+											function() {
+												$("body")
+														.removeClass(
+																"tlyPageGuideWelcomeOpen tlypageguide-open");
+												$("#tlyPageGuideOverlay")
+														.remove();
+												$(document.body).css({
+													"overflow-y" : "auto"
+												});
+											});
+						});
+		$(function() {
+			$(".res_ok").on(
+					'click',
+					function() {
+						var obj = this;
+						//询问框
+						var doms = layer.confirm('您确定生成报告吗？', {
+							btn : [ '是的', '取消' ]
+						//按钮
+						}, function() {
+							layer.close(doms);
+
+		window.open('/cctv/project/report.action?id='
+									+ $(obj).attr("data-value")
+									+ "&templateType=1");
+						}, function() {
+						});
+					});
+		})
+		function showImg(url) {
+			var img = "<img src='" + url + "' />";
+			layer.open({
+				type : 1,
+				shade : false,
+				title : false, //不显示标题  
+				area : [ 'auto', 'auto' ],
+				area : [ '704px', '530px' ],
+				content : img, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响  
+				cancel : function() {
+
+				}
+			});
+		}
+	</script>
+</body>
+</html>

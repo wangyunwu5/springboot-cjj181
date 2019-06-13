@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.springboot.dao.CompanyDao">
+
+	<update id="updateCompany" parameterType="Company">
+		UPDATE company SET name=#{name}
+		WHERE id=#{id}
+	</update>
+	<insert id="insertCompany" parameterType="Company" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO company (name) VALUES(
+			#{name}
+		)
+	</insert>
+	<delete id="deleteCompany" parameterType="Company">
+		DELETE FROM company WHERE id=#{id}
+	</delete>
+	<select id="findInfoCompany" parameterType="Map" resultType="Company">
+		select * from company
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="name != null">
+				and name = #{name}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findListCompany" parameterType="Map" resultType="Company">
+		select * from company
+		<where>
+			<if test="name != null">
+				and name = #{name}
+			</if>
+		</where>
+		order by id
+	</select>
+	<select id="findListCompanyByPage" parameterType="Map" resultMap="CompanyMap">
+	 select *, (select count(*) from users where company.id=users.companyid ) as userCount from company
+		<where>
+			<if test="companyName != null">
+				and name = #{companyName}
+			</if>
+			<if test="company != null">
+				and id = #{id}
+			</if>
+		</where>
+		order by date desc
+		<if test="pageIndex > 0">
+			limit #{pageSize} offset pageIndex
+		</if>
+	</select>
+    <select id="getCount" parameterType="Map" resultType="int">
+		select count(*) from company
+		<where>
+			<if test="companyName != null">
+				and name like #{companyName}
+			</if>
+		</where>
+	</select>
+		<resultMap id="CompanyMap" type="Company">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="userCount" column="userCount"/>
+	</resultMap>
+</mapper>
+ 

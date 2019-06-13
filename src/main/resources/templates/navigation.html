@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" th:fragment="navigation">
+  <head>
+  	<link rel="stylesheet" type="text/css" href="/cctv/css/navigation.css"/>
+  	<script type="text/javascript" src="/cctv/js/jquery-1.9.1.min.js"></script>
+  	<script type="text/javascript">
+  	$(document).ready(function() {
+  		$("#naviLogo").click(function() {
+  			window.location.href = "/cctv/project/showlist";
+  		});
+  	});
+  	</script>
+  </head>
+  <body>
+    <div id="naviMain">
+      <div id="navi">
+        <div style="width:780px;height:100%;float:left;">
+          <img id="naviLogo" src="/cctv/img/msdi.png" title="首页">
+        </div>
+        <div class="naviItem" style="width:120px">
+          <img id="naviImg" src="/cctv/img/头像.png">
+            <a th:text="${session.user?.name}"></a>
+        </div>
+        <div class="naviItem">
+          <img src="/cctv/img/个人1.jpg">
+          <a href="/cctv/user/center">个人中心</a>
+        </div>
+        <div class="naviItem">
+          <img src="/cctv/img/退出1.jpg">
+          <a href="/cctv/user/leave">退出系统</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

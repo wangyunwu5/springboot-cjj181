@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<title>项目列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="icon" type="image/x-icon" href="/cctv/favicon.ico" />
+<link rel="stylesheet" type="text/css" href="/cctv/css/project/showlist.css" />
+<script type="text/javascript" src="/cctv/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/cctv/js/layer/layer.js"></script>
+<script type="text/javascript" src="/cctv/js/user/userList.js"></script>
+</head>
+<body>
+	<div th:replace="navigation::navigation"></div>
+	<div id="Tip"></div>
+	<div id="main">
+		<div th:replace="common::commonNav"></div>
+		<div id="mainRight">
+			<div id="rightTop">用户列表</div>
+			<div id="rightMenu">
+				<span style="font-weight: 600; margin-left: 10px; float: left;">关键字查询：</span> <input id="menuBtn1" type="button" value="←" /> <input id="menuText" th:value="${keyword}" placeholder="昵称/电话/登录账号/邮箱" /> <input id="menuBtn2" type="button" value="立即查询" />
+				<div style="width: 420px; height: 100%; float: left;">
+					<select name="select" style="margin-left: 20px; width: 300px;height: 30px;font-size: 15px;" id="companyid">
+						<option value="0" th:selected="${companyid == 0}">全部公司</option>
+                        <option th:each="company,userStat:${companys}" th:value="${company.id}" th:text="${company.name}" th:selected="${company.id == companyid}"></option>
+					</select>
+				</div>
+				<input type="button" id="append" value="+ 添加" onclick="showBox('/cctv/user/userManage/editUser?action=add&id=0','添加用户')" />
+			</div>
+			<table id="tab1">
+				<thead>
+					<tr height="40px" style="background-color: #F0F0F0">
+						<th width="4%">NO</th>
+						<th width="6%">昵称</th>
+						<th width="10%">登录账号</th>
+						<th width="10%">邮箱</th>
+						<th width="10%">电话</th>
+						<th width="6%">角色</th>
+						<th width="20%">所属公司</th>
+						<th width="10%">注册日期</th>
+						<th width="10%">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user,status:${users}" th:id="${'user_'+user.id}">
+						<td th:text="${status.count+(pageIndex-1)*15}"></td>
+						<td><a href="" th:text="${user.name}">小王</a></td>
+						<td><span th:text="${user.username}">小王</span></td>
+						<td><span th:text="${user.email}">42564@qq.com</span></td>
+						<td><span th:text="${user.phone}">15236545454</span></td>
+						<td><span th:if="${user.role=='role4'}">普通</span><span th:if="${user.role=='role2'}">管理员</span></td>
+						<td><span th:text="${user.companyName}">msdi</span></td>
+						<td><span th:text="${user.date}">2019</span></td>
+						<td><input type="button" value="编辑" class="tablebtn1"  th:onclick="showBox('/cctv/user/userManage/editUser?action=edit&id=[[${user.id}]]','编辑用户')"></td>
+					</tr>
+				</tbody>
+			</table>
+			<img th:if="${#lists.isEmpty(users)}" src="/cctv/img/null.png" style="margin: 145px 415px; float: left;">
+			<table id="tab2" th:if="${!#lists.isEmpty(users)}">
+				<tr height="30px">
+					<td width="45%" align="right"><input type="button" value="<<上一页" class="pagebtn" /></td>
+					<td width="10%" align="center"><a th:text="${pageIndex}"></a> / <a th:text="${cont}"></a></td>
+					<td width="45%" align="left"><input type="button" value="下一页>>" class="pagebtn" /></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div style="width: 100%; margin-top: 20px; float: left; color: #ccc; text-align: center; font-size: 14px;">
+		<p>香港麦斯迪埃高科技有限责任公司</p>
+		<p>Copyright © 2017 All Rights Reserved</p>
+	</div>
+</body>
+</html>

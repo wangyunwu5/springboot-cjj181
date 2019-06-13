@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:if="${action == 'add'}">添加公司</title>
+<title th:if="${action == 'edit'}">编辑公司</title>
+<link rel="stylesheet" href="/cctv/css/comm/modernforms.css">
+<link rel="stylesheet" href="/cctv/css/comm/font-awesome.min.css">
+<script type="text/javascript" src="/cctv/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/cctv/js/layer/layer.js"></script>
+</head>
+<body class="mdn-bg">
+	<div id="mainInfo" class="modern-forms">
+		<input type="hidden" id="id" th:value="${company.id}" /> <input type="hidden" id="action" th:value="${action}" />
+		<div class="modern-container">
+			<div class="col col-3">
+				<div class="field-group">
+					<input type="search" class="mdn-input" th:value="${company.name}" id="name" placeholder="公司名称"> <label class="mdn-label">公司名称：</label> <span class="mdn-bar"></span>
+				</div>
+			</div>
+			<button type="button" id="combnt" class="mdn-button btn-primary btn-raised">确定</button>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+   $(function(){
+	   
+	   var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	   
+	   $("#combnt").on('click',function(){
+		   var id = $("#id").val(),name = $("#name").val();
+		   if(name == null || name == "" || name.length < 3){
+			   layer.msg("请输入正确的公司名称");
+			   $("#name").focus();
+			   return;
+		   }
+		   var loadindex = layer.load();
+	        $.ajax({
+	            url:'/cctv/company/editAction',
+	            data:{"id":id,"name":name,"action":$("#action").val()},
+	            type:"post",
+	            async:false,
+	            datatype:"json",
+	            success:function(data) {
+	            	layer.close(loadindex)
+	                if(data.code == 200){
+	                    parent.layer.msg(data.msg);
+	                    parent.window.location.reload();
+	                }
+	                layer.msg(data.msg);
+	            }
+	        });
+	   });
+	   
+   })
+</script>
+</html>

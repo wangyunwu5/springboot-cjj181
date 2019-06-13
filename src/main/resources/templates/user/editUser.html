@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:if="${action == 'add'}">添加公司</title>
+<title th:if="${action == 'edit'}">编辑公司</title>
+<link rel="stylesheet" href="/cctv/css/comm/modernforms.css">
+<link rel="stylesheet" href="/cctv/css/comm/font-awesome.min.css">
+<script type="text/javascript" src="/cctv/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/cctv/js/layer/layer.js"></script>
+</head>
+<body class="mdn-bg" style="font-size: 15px;">
+	<input type="hidden" id="id" th:value="${user?.id}" />
+	<input type="hidden" id="action" th:value="${action}" />
+	<div class="modern-forms">
+		<div class="modern-container">
+			<form>
+				<fieldset>
+					<div class="form-row">
+						<div class="col col-6">
+							<div class="field-group">
+								<input type="text" class="mdn-input" placeholder="*用户名" id="name" th:value="${user?.name}"> <label class="mdn-label">*用户名</label> <span class="mdn-bar"></span>
+							</div>
+						</div>
+						<!-- end col-6 -->
+						<div class="col col-6">
+							<div class="field-group prepend-icon">
+								<input type="email" class="mdn-input" placeholder="绑定邮箱" id="email" th:value=${user?.email}> <label class="mdn-label">绑定邮箱</label> <span class="mdn-icon"><i class="fa fa-envelope"></i></span> <span class="mdn-bar"></span>
+							</div>
+						</div>
+						<!-- end col-6 -->
+					</div>
+					<!-- end form-row -->
+					<div class="form-row">
+						<div class="col col-6">
+							<div class="field-group">
+								<input type="search" class="mdn-input" placeholder="*登录账号" id="username" th:value="${user?.username}"> <label class="mdn-label">登录账号</label> <span class="mdn-bar"></span>
+							</div>
+						</div>
+						<!-- end col-6 -->
+						<div class="col col-6">
+							<div class="field-group">
+								<input type="tel" class="mdn-input" placeholder="联系电话" id="phone" th:value="${user?.phone}"> <label class="mdn-label">联系电话</label> <span class="mdn-bar"></span>
+							</div>
+						</div>
+						<!-- end col-6 -->
+					</div>
+					<!-- end form-row -->
+
+					<div class="form-row">
+						<div class="col col-6">
+							<div class="field-group" style="margin-top: 16px; margin-left: 32px;">
+								<label class="mdn-switch"> <input type="checkbox" id="role"  th:checked="${user?.role=='role2'}" > <span class="switch-toggle"></span> <span class="switch-label">管理员</span>
+								</label>
+							</div>
+						</div>
+						<!-- end col-6 -->
+						<div class="col col-6">
+							<div class="field-group mdn-select">
+								<select name="select" id="companyid">
+									<option th:each="company,userStat:${companys}" th:value="${company?.id}" th:text="${company?.name}" th:selected="${company?.id == user?.company?.id}"></option>
+								</select> <label class="mdn-label">请选择公司</label> <span class="mdn-bar"></span>
+							</div>
+						</div>
+						<!-- end col-6 -->
+					</div>
+					<!-- end form-row -->
+
+					<!-- end form-row -->
+				</fieldset>
+
+
+				<div class="mdn-footer" style="float: right;">
+					<button type="button" class="mdn-button btn-primary" id="combnt">确定</button>
+				</div>
+			</form>
+		</div>
+		<!-- modern-container -->
+	</div>
+	<!-- modern-forms -->
+	<div style="margin: 50px auto; max-width: 700px; color: red" th:if="${action == 'add' && id == 0}">*注：新建账号原始密码都为：123456</div>
+</body>
+<script type="text/javascript">
+   $(function(){
+	   
+	   var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	   
+	   $("#combnt").on('click',function(){
+		   var id = $("#id").val(),name = $("#name").val(),username = $("#username").val(),email = $("#email").val(),phone = $("#phone").val(),companyid = $("#companyid").val();
+		   if(name == null || name == "" || name.length < 1){
+			   layer.msg("请输入正确的用户名");
+			   $("#name").focus();
+			   return;
+		   }
+		   if(username == null || username == "" || username.length < 6){
+			   layer.msg("请输入正确的登录账号");
+			   $("#username").focus();
+			   return;
+		   }
+		   if(email !="" && !check_email(email)){
+			   layer.msg("请输入正确的邮箱");
+			   $("#email").focus();
+			   return;
+		   }
+		   if(phone != "" && !isPhoneNo(phone)){
+			   layer.msg("请输入正确的手机号码");
+			   $("#phone").focus();
+			   return;
+		   }
+		   if(companyid == "" || companyid == null){
+			   companyid = 0;
+		   }
+		   var role = "role4";
+		   if($("#role").is(':checked')){
+			   role = "role2"
+		   }
+		   
+		   var parameter = {"id":id,"name":name,"username":username,"email":email,"phone":phone,"companyid":companyid,"role":role,"action":$("#action").val()};
+		   
+		   var loadindex = layer.load();
+	        $.ajax({
+	            url:'/cctv/user/userManage/editAction',
+	            data: parameter,
+	            type:"post",
+	            async:false,
+	            datatype:"json",
+	            success:function(data) {
+	            	layer.close(loadindex)
+	                if(data.code == 200){
+	                    parent.layer.msg(data.msg);
+	                    
+	                    parent.window.location.reload();
+	                }
+	                layer.msg(data.msg);
+	            }
+	        });
+	   });
+	   
+   })
+   
+   // 验证手机号
+function isPhoneNo(phone) {
+    var pattern = /^1[3456789]\d{9}$/;
+    return pattern.test(phone);
+}
+       /** 检查邮箱 */
+    function check_email(email) {
+    	var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+        if (email == "" || !reg.test(email)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+</html>

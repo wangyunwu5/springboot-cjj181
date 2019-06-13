@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+  <head>
+	<title>个人中心</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<link rel="icon" type="image/x-icon" href="/cctv/favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="/cctv/css/user/center.css">
+	<script type="text/javascript" src="/cctv/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/cctv/js/layer/layer.js"></script>
+    <script type="text/javascript" src="/cctv/js/user/center.js"></script>
+  </head>
+  <body>
+    <div th:replace="navigation::navigation"></div>
+    <div id="Tip"></div>
+    <div id="main">
+    <div th:replace="common::commonNav">
+    </div>
+    <div id="mainRight">
+        <div id="rightTop">用户中心</div>
+        <div style="width:160px;height:200px;float:left;"><img id="img" src="/cctv/img/portrait.png"></div>
+        <table class="table" style="width:500px;margin:10px 10px;float:left;">
+          <tbody><tr><td colspan="2"><a style="font-size:20px;font-weight:700">用户信息</a></td></tr>
+          <tr>
+            <td width="80px"><a style="font-weight:700">用户姓名: </a></td>
+            <td id="logtd" width="240px" th:text="${userinfo?.name}" th:attr="logname=${userinfo?.username}"></td>
+          </tr>
+          <tr>
+            <td><a style="font-weight:700">所属公司: </a></td>
+            <td th:text="${userinfo?.company?.name}" style="width: 300px">暂无公司</td>
+          </tr>
+          <tr>
+            <td><a style="font-weight:700">电子邮箱: </a></td>
+            <td th:text="${userinfo?.email}"></td>
+          </tr>
+          <tr>
+            <td><a style="font-weight:700">电话: </a></td>
+            <td th:text="${userinfo?.phone}"></td>
+          </tr>
+          <tr>
+            <td><a style="font-weight:700">注册日期: </a></td>
+            <td th:text="${userinfo?.date}">2019-05-06</td>
+          </tr>
+        </tbody></table>
+        
+        
+        <table id="tab1" style="width:980px;margin:20px 10px;">
+          <tbody>
+          <tr>
+            <td width="100px;" align="center">安全程度：</td>   
+            <td width="740px;" align="left" th:if="${safe==1}">
+              <div style="width:100px;height:20px;background-color:#FF9900;margin-right:80px;float:left;"></div>
+              <font>安全级别：<span style="color:#FF9900">低</span></font>
+            </td>
+            <td width="740px;" align="left" th:if="${safe==2}">
+              <div style="width:200px;height:20px;background-color:#FF9900;margin-right:80px;float:left;"></div>
+              <font>安全级别：<span style="color:#FF9900">高</span></font>
+            </td>
+            <td width="140px"></td>
+          </tr>
+          <tr>
+            <td align="center"><h4 style="font-weight:700">登录密码：</h4></td>
+            <td align="left">建议您定期更换密码使账号更安全，设置一个包含字母，符号或数字中至少两项且长度超过6位的密码</td>
+            <td align="center"><img src="/cctv/img/ioc1.jpg" style="float:left;"><span style="color:#44B333">已设置</span> | <a id="link1">修改</a></td>
+          </tr>
+          <tr>
+            <td align="center"><h4 style="font-weight:700">电子邮箱：</h4></td>
+            <td align="left">绑定邮箱可以用于安全验证、找回密码等重要操作</td>
+            <td align="center" th:if="${userinfo?.email!=null&&userinfo?.email !=''}">
+              <img src="/cctv/img/ioc1.jpg" style="float:left;"><span style="color:#44B333">已设置</span> | <a id="link2">修改</a>
+            </td>
+             <td align="center" th:if="${userinfo?.email==null || userinfo?.email ==''}">
+              <img src="/cctv/img/ioc2.jpg" style="float:left;"><span style="color:#44B333">未设置</span> | <a id="link2">绑定</a>
+            </td>
+          </tr>
+          <tr>
+            <td align="center"><h4 style="font-weight:700">手机号码：</h4></td>
+            <td align="left">绑定手机号码用于安全验证、提高账号安全等级等</td>
+            
+            <td align="center" th:if="${userinfo?.phone !=null && userinfo?.phone != ''}">
+              <img src="/cctv/img/ioc1.jpg" style="float:left;"><span style="color:#44B333">已设置</span> | <a id="link3">修改</a>
+         	</td>
+         	<td align="center" th:if="${userinfo?.phone == null || userinfo?.phone == ''}">
+              <img src="/cctv/img/ioc2.png" style="float:left;"><span style="color:#FF9900">未设置</span> | <a id="link3">绑定</a>
+         	</td>
+          </tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div style="width:100%;margin-top:20px;float:left;color:#ccc;text-align: center;font-size:14px;">
+      <p>香港麦斯迪埃高科技有限责任公司</p>
+      <p>Copyright © 2017 All Rights Reserved</p>	
+    </div>
+  </body>
+</html>
